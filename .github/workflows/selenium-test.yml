@@ -10,7 +10,7 @@ on:
 
 
 jobs:
-  build:
+  run-web-automation:
 
     runs-on: ubuntu-latest
 
@@ -36,3 +36,20 @@ jobs:
     # execute gradlew command for running
     - name: Execute test
       run: ./gradlew WEBTest
+
+    #archive test
+    - name: Archive Test
+      uses: actions/upload-artifact@v4.0.0
+      if: always()
+      with:
+        name: Cucumber Report
+        path: reports
+
+    # deploy to github page
+    - name: Deploy report to github page
+      if: always()
+      uses: peaceiris/actions-gh-pages@v3.7.3
+      with:
+          PERSONAL_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+          PUBLISH_DIR: reports
+    
